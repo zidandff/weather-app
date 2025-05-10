@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import SearchBar from "./components/SearchBar";
 import WeatherCard from "./components/WeatherCard";
+import { fetchCurrentWeather } from "./http";
 
 function App() {
   const [currentWeather, setCurrentWeather] = useState();
@@ -8,16 +9,16 @@ function App() {
 
   useEffect(() => {
     async function fetchWeather() {
+      setIsFetching(true);
       try {
-        setIsFetching(true);
         const position = await new Promise((resolve, reject) =>
           navigator.geolocation.getCurrentPosition(resolve, reject)
         );
-        const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=73f072a701ccb036d40ef73964844b7f`
+        const weather = await fetchCurrentWeather(
+          position.coords.latitude,
+          position.coords.longitude
         );
-        const responseData = await response.json();
-        setCurrentWeather(responseData);
+        setCurrentWeather(weather);
       } catch (error) {
         console.log(error);
       } finally {
