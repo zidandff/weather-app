@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: linear-gradient(135deg, #3f6dab -10%, #1452a4 50%, #3f6dab 100%);
+  background-repeat: no-repeat;
+  height: 100dvh;
+}
+
+@layer components {
+  .glass {
+    @apply bg-gradient-to-br from-white/25 to-white/5 backdrop-blur-sm rounded-2xl border border-gray-200/40;
+  }
+}
