@@ -2,7 +2,7 @@ import locationIcon from "../assets/location-icon.svg";
 import weatherCloudy from "../assets/weather-cloudy.svg";
 
 export default function WeatherCard({ weather, isLoading }) {
-  console.log(weather);
+  // console.log(weather);
   return (
     <section id="weather">
       {isLoading && <p>Getting your city...</p>}

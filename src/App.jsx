@@ -5,6 +5,7 @@ import { fetchCurrentWeather } from "./http";
 
 function App() {
   const [currentWeather, setCurrentWeather] = useState();
+  const [position, setPosition] = useState({ lat: null, lon: null });
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
@@ -19,6 +20,10 @@ function App() {
           position.coords.longitude
         );
         setCurrentWeather(weather);
+        setPosition({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+        });
       } catch (error) {
         console.log(error);
       } finally {
@@ -30,7 +35,7 @@ function App() {
   }, []);
   return (
     <div className="flex items-center w-fit mx-auto flex-col mt-[100px]">
-      <SearchBar />
+      <SearchBar userPosition={position} />
       <WeatherCard isLoading={isFetching} weather={currentWeather} />
     </div>
   );

@@ -1,15 +1,24 @@
 import { useState, useRef } from "react";
 import searchIcon from "../assets/search-icon.svg";
+import { fetchCitiesName } from "../http";
 
-export default function SearchBar() {
+export default function SearchBar({ userPosition }) {
   const [keyword, setKeyword] = useState("");
   const [inputIsFocus, setInputIsFocus] = useState(false);
+  const [cities, setCities] = useState([]);
   const keywordInput = useRef();
 
-  function handleOnChange(event) {
+  async function handleOnChange(event) {
     setKeyword(event.target.value);
     if (event.target.value.length > 0 && inputIsFocus) {
-      console.log(`mencari ${event.target.value}`);
+      // console.log(`mencari ${event.target.value}`);
+      const cities = await fetchCitiesName(
+        event.target.value,
+        userPosition.lat,
+        userPosition.lon
+      );
+      setCities(cities.data);
+      // console.log(cities.data);
     }
   }
 
@@ -30,18 +39,14 @@ export default function SearchBar() {
       </div>
       {inputIsFocus && keyword.length > 0 && (
         <ul className="min-w-[480px] w-full glass backdrop-blur-xl p-4 absolute z-10 -mt-4">
-          <li>
-            <button>Bandung</button>
-          </li>
-          <li>
-            <button>Banjaran</button>
-          </li>
-          <li>
-            <button>Balikpapan</button>
-          </li>
-          <li>
-            <button>Badung</button>
-          </li>
+          {cities.length > 0 &&
+            cities.map((city) => (
+              <li key={city.id}>
+                <button>
+                  {city.name}, {city.region}, {city.country}
+                </button>
+              </li>
+            ))}
         </ul>
       )}
     </div>
