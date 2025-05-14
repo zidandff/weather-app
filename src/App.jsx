@@ -5,7 +5,7 @@ import { fetchCurrentWeather } from "./http";
 
 function App() {
   const [currentWeather, setCurrentWeather] = useState();
-  const [position, setPosition] = useState({ lat: null, lon: null });
+  const [userCoords, setUserCoords] = useState({ lat: null, lon: null });
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ function App() {
           position.coords.longitude
         );
         setCurrentWeather(weather);
-        setPosition({
+        setUserCoords({
           lat: position.coords.latitude,
           lon: position.coords.longitude,
         });
@@ -33,9 +33,26 @@ function App() {
 
     fetchWeather();
   }, []);
+
+  async function handleSelectCityWeather(lat, lon) {
+    console.log("heloo");
+    setIsFetching(true);
+    try {
+      const weather = await fetchCurrentWeather(lat, lon);
+      setCurrentWeather(weather);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFetching(false);
+    }
+  }
+
   return (
     <div className="flex items-center w-fit mx-auto flex-col mt-[100px]">
-      <SearchBar userPosition={position} />
+      <SearchBar
+        userPosition={userCoords}
+        onSelectCity={handleSelectCityWeather}
+      />
       <WeatherCard isLoading={isFetching} weather={currentWeather} />
     </div>
   );

@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import searchIcon from "../assets/search-icon.svg";
 import { fetchCitiesName } from "../http";
 
-export default function SearchBar({ userPosition }) {
+export default function SearchBar({ userPosition, onSelectCity }) {
   const [keyword, setKeyword] = useState("");
   const [inputIsFocus, setInputIsFocus] = useState(false);
   const [cities, setCities] = useState([]);
@@ -18,7 +18,7 @@ export default function SearchBar({ userPosition }) {
         userPosition.lon
       );
       setCities(cities.data);
-      // console.log(cities.data);
+      console.log(cities.data);
     }
   }
 
@@ -34,15 +34,22 @@ export default function SearchBar({ userPosition }) {
           value={keyword}
           onChange={handleOnChange}
           onFocus={() => setInputIsFocus(true)}
-          onBlur={() => setInputIsFocus(false)}
+          onBlur={() => {
+            setTimeout(() => setInputIsFocus(false), 200);
+          }}
         />
       </div>
       {inputIsFocus && keyword.length > 0 && (
-        <ul className="min-w-[480px] w-full glass backdrop-blur-xl p-4 absolute z-10 -mt-4">
+        <ul className="min-w-[480px] w-full glass backdrop-blur-lg p-1 absolute z-10 -mt-4">
           {cities.length > 0 &&
             cities.map((city) => (
-              <li key={city.id}>
-                <button>
+              <li key={city.id} className="border-red-500 border bg-red-500">
+                <button
+                  className="text-gray-200 rounded-xl py-2 px-4 hover:text-gray-50 hover:backdrop-blur-xl w-full text-left z-30 bg-blue-500"
+                  onClick={() => {
+                    onSelectCity(city.latitude, city.longitude);
+                  }}
+                >
                   {city.name}, {city.region}, {city.country}
                 </button>
               </li>

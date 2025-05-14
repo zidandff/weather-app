@@ -12,13 +12,6 @@ export async function fetchCurrentWeather(lat, lon) {
 }
 
 export async function fetchCitiesName(keyword, lat, lon) {
-  // let location = "";
-  // if (lat !== null && lon !== null) {
-  //   location =
-  //     "&location=" +
-  //     (+lat > 0 ? "%2B" + lat : lat) +
-  //     (+lon > 0 ? "%2B" + lon : lon);
-  // }
   let location = "";
 
   if (lat !== null && lon !== null) {
